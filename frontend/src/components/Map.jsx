@@ -443,6 +443,21 @@ export default function Map({
                   {unit.id}
                 </text>
 
+                {/* Phone unit tag: real phone on the drill map */}
+                {unit.source === 'phone' && (
+                  <text
+                    x="0"
+                    y="-16"
+                    textAnchor="middle"
+                    fill="#facc15"
+                    fontSize="7"
+                    fontWeight="700"
+                    fontFamily="JetBrains Mono, monospace"
+                  >
+                    {unit.isDemoLocation ? 'PHONE (demo)' : 'PHONE'}
+                  </text>
+                )}
+
                 {/* Stale Icon Badge */}
                 {isStale && (
                   <g transform="translate(6, -10)">

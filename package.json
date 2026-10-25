@@ -6,6 +6,8 @@
   "description": "Hack Wave AI real-time dispatch and operations engine prototype",
   "scripts": {
     "dev": "node dev.js",
+    "build": "npm --prefix backend install --no-audit --no-fund && npm --prefix frontend install --include=dev --no-audit --no-fund && npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
     "test": "npm --prefix backend test"
   }
 }

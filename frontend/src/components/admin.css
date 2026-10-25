@@ -1,0 +1,20 @@
+/* Authority console layout: report list beside the live map */
+.admin-console { min-height:100vh; background:#0b1220; color:#e6edf7; }
+.admin-grid { display:grid; gap:16px; padding:16px; }
+@media (min-width: 1100px) { .admin-grid { grid-template-columns: 380px 1fr; align-items:start; } .admin-reports { position:sticky; top:12px; max-height:calc(100vh - 24px); overflow:auto; } }
+.admin-reports { background:#131d30; border:1px solid rgba(148,163,184,.18); border-radius:14px; padding:14px; }
+.admin-reports h2 { font-size:1.05rem; margin:4px 0 10px; }
+.admin-muted { color:#a3b3cc; }
+.admin-muted.small { font-size:.78rem; }
+.report-cards { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.report-card { width:100%; text-align:left; display:grid; gap:4px; background:#0b1220; color:inherit; border:1px solid rgba(148,163,184,.2); border-radius:12px; padding:12px; cursor:pointer; font:inherit; }
+.report-card:hover { border-color:#22d3ee; }
+.report-card.sel { border-color:#22d3ee; box-shadow:0 0 0 2px rgba(34,211,238,.25); }
+.report-card:focus-visible { outline:3px solid #22d3ee; outline-offset:2px; }
+.report-desc { font-size:.92rem; }
+.admin-map { min-width:0; }
+.admin-map .livemap { min-height:520px; height:62vh; }
+.admin-console .tag { display:inline-block; font-size:.7rem; font-weight:800; letter-spacing:.04em; padding:3px 8px; border-radius:6px; background:#22324d; margin-right:6px; }
+.admin-console .tag.red { background:#3b0f1a; color:#fda4af; }
+.admin-console .tag.green { background:#0f2f22; color:#86efac; }
+.admin-console .report-card strong { font-size:1rem; }

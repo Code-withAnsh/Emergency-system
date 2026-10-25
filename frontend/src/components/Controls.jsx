@@ -76,7 +76,7 @@ export default function Controls({
           <span className="btn-icon">📊</span>
           <div className="btn-text">
             <span className="btn-label">1000 Incident Benchmark</span>
-            <span className="btn-sub">Nearest-unit vs AI Ranking proof (96.1% late reduction)</span>
+            <span className="btn-sub">Nearest-unit vs AI Ranking proof (measured live in the modal)</span>
           </div>
         </button>
       </div>

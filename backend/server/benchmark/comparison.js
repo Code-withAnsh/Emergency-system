@@ -1,9 +1,9 @@
 // Empirical Benchmark: 1000 Simulated Incidents Comparison
 // Naive Nearest-Unit Assignment vs. HackWave Smart Ranking Engine
 import os from 'node:os';
-import { FleetSimulator } from '../server/sim/fleet.js';
-import { rank, haversineDistanceKm, calculateEtaMinutes } from '../server/dispatch/rank.js';
-import { MAP_CONFIG, THRESHOLDS } from '../server/config.js';
+import { FleetSimulator } from '../sim/fleet.js';
+import { rank, haversineDistanceKm, calculateEtaMinutes } from '../dispatch/rank.js';
+import { MAP_CONFIG, THRESHOLDS } from '../config.js';
 
 function randomInRange(min, max) {
   return min + Math.random() * (max - min);
@@ -134,7 +134,7 @@ export function run1000IncidentComparison() {
   return results;
 }
 
-if (process.argv[1]?.endsWith('simulation_comparison.benchmark.js')) {
+if (process.argv[1]?.endsWith('benchmark/comparison.js')) {
   console.log('Running 1000 Incident Simulation Benchmark...');
   const res = run1000IncidentComparison();
   console.log(JSON.stringify(res, null, 2));

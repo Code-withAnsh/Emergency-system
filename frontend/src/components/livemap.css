@@ -1,0 +1,4 @@
+.livemap { position:relative; width:100%; height:100%; min-height:460px; border-radius:12px; overflow:hidden; }
+.livemap-legend { position:absolute; left:10px; bottom:10px; z-index:500; display:flex; flex-wrap:wrap; gap:6px 12px; max-width:calc(100% - 20px); padding:8px 10px; border-radius:10px; background:rgba(11,18,32,.85); color:#e6edf7; font-size:.72rem; border:1px solid rgba(148,163,184,.2); }
+.livemap-legend span { display:inline-flex; align-items:center; gap:5px; }
+.livemap-legend i { width:9px; height:9px; border-radius:50%; display:inline-block; }
