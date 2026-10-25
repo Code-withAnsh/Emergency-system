@@ -1,0 +1,32 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+*.log
+
+# OS and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Environment and secrets (never push)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+*secret*
+*credential*
+secrets/
+secret/
+credentials/
+.secrets/
+
+# Private instruction folders (never push)
+instruction
+instruction/
+instructions
+instructions/

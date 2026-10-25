@@ -1,0 +1,11 @@
+{
+  "name": "hackwave-dispatch",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Hack Wave AI real-time dispatch and operations engine prototype",
+  "scripts": {
+    "dev": "node dev.js",
+    "test": "npm --prefix backend test"
+  }
+}
