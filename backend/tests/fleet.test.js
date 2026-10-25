@@ -25,8 +25,8 @@ test('FleetSimulator initializes with 60 units (30 ambulances, 30 bikes) in Bhop
 });
 
 test('FleetSimulator tick() advances positions and handles stale GPS simulation', (t) => {
-  const sim = new FleetSimulator({ totalUnits: 60 });
   const t0 = 1000000;
+  const sim = new FleetSimulator({ totalUnits: 60, now: t0 });
   
   // Record initial positions
   const initialUnits = sim.getUnits(t0);

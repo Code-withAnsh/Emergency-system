@@ -13,18 +13,16 @@ export class FleetSimulator {
     this.phoneUnits = new Map();
     this.intervalId = null;
     this.listeners = new Set();
-    this.initFleet();
+    this.initFleet(options.now || Date.now());
   }
 
   /**
    * Initializes 60 simulated units (30 ambulances, 30 bikes) inside Bhopal box
    */
-  initFleet() {
+  initFleet(now = Date.now()) {
     this.units.clear();
     const ambulanceCount = Math.round(this.totalUnits * this.ambulanceRatio);
     const bikeCount = this.totalUnits - ambulanceCount;
-
-    const now = Date.now();
 
     // Spawn Ambulances
     for (let i = 1; i <= ambulanceCount; i++) {
