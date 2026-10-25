@@ -2,12 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert';
 import app from '../server/index.js';
 
-test('GET /api/fleet returns snapshot with 60 units and summary', async (t) => {
+// Admin credentials for this test only (not read from .env)
+process.env.ADMIN_USERNAME = 'test-admin';
+process.env.ADMIN_PASSWORD = 'test-pass-123';
+
+test('GET /api/fleet returns snapshot with 60 units and summary (admin session)', async (t) => {
   const server = app.listen(0);
   const port = server.address().port;
+  const base = `http://127.0.0.1:${port}`;
 
   try {
-    const res = await fetch(`http://127.0.0.1:${port}/api/fleet`);
+    const login = await fetch(`${base}/api/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: 'test-admin', password: 'test-pass-123' })
+    });
+    assert.strictEqual(login.status, 200);
+    const cookie = login.headers.get('set-cookie').split(';')[0];
+
+    const res = await fetch(`${base}/api/fleet`, { headers: { Cookie: cookie } });
     assert.strictEqual(res.status, 200);
     const data = await res.json();
 

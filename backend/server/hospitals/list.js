@@ -10,6 +10,10 @@ export const DUMMY_HOSPITALS = [
     lng: 77.4020,
     totalBeds: 350,
     icuBeds: 24,
+    emergency: true,
+    ayushman: null,
+    bedsAvailable: 42,
+    icuAvailable: 3,
     emergencyPhone: '0755-DUMMY-01',
     isDummy: true,
     disclaimer: 'DUMMY DATA'
@@ -22,6 +26,10 @@ export const DUMMY_HOSPITALS = [
     lng: 77.4602,
     totalBeds: 500,
     icuBeds: 45,
+    emergency: true,
+    ayushman: null,
+    bedsAvailable: 18,
+    icuAvailable: 0,
     emergencyPhone: '0755-DUMMY-02',
     isDummy: true,
     disclaimer: 'DUMMY DATA'
@@ -34,6 +42,10 @@ export const DUMMY_HOSPITALS = [
     lng: 77.4280,
     totalBeds: 250,
     icuBeds: 18,
+    emergency: true,
+    ayushman: null,
+    bedsAvailable: 25,
+    icuAvailable: 2,
     emergencyPhone: '0755-DUMMY-03',
     isDummy: true,
     disclaimer: 'DUMMY DATA'
@@ -46,6 +58,10 @@ export const DUMMY_HOSPITALS = [
     lng: 77.3450,
     totalBeds: 400,
     icuBeds: 30,
+    emergency: false,
+    ayushman: null,
+    bedsAvailable: 0,
+    icuAvailable: 0,
     emergencyPhone: '0755-DUMMY-04',
     isDummy: true,
     disclaimer: 'DUMMY DATA'
@@ -58,6 +74,15 @@ export const DUMMY_HOSPITALS = [
  * @param {string} preference - 'nearest' | 'government' | 'private' | hospitalId
  * @returns {Object} Selected hospital details with fallback explanation
  */
+// Active list: DUMMY_HOSPITALS by default, replaced by the database list at startup
+let activeHospitals = DUMMY_HOSPITALS;
+export function setActiveHospitals(list) {
+  activeHospitals = list;
+}
+export function getActiveHospitals() {
+  return activeHospitals;
+}
+
 export function selectHospital(coords, preference = 'nearest') {
   if (!coords || typeof coords.lat !== 'number' || typeof coords.lng !== 'number') {
     return null;
@@ -66,7 +91,7 @@ export function selectHospital(coords, preference = 'nearest') {
   const normalizedPref = (preference || 'nearest').toLowerCase();
 
   // Calculate distances to all dummy hospitals
-  const hospitalsWithDistance = DUMMY_HOSPITALS.map((h) => {
+  const hospitalsWithDistance = activeHospitals.map((h) => {
     const dist = haversineDistanceKm(coords.lat, coords.lng, h.lat, h.lng);
     // Hospital transit speed ~40 km/h
     const transitEtaMinutes = (dist / 40) * 60;

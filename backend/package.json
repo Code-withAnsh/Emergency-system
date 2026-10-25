@@ -12,6 +12,10 @@
     "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongodb": "^6.21.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

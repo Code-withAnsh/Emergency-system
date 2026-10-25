@@ -1,0 +1,110 @@
+/* Landing page: full-width hero (custom grid, pointer spotlight, Three.js city),
+   pinned 3D scrollytelling, and pointer glow on cards. Loaded last so it wins over home.css / anim.css. */
+
+/* ---------- Hero ---------- */
+.hero-full { position:relative; isolation:isolate; overflow:hidden; display:flex; align-items:center;
+  min-height:clamp(560px, 86vh, 800px); padding:44px 0 90px;
+  background: radial-gradient(900px 480px at 80% -12%, #14294b 0%, transparent 62%), var(--pub-bg); }
+/* Soft fade into the page below, so the 3D scene never ends in a hard edge */
+.hero-full::after { content:''; position:absolute; left:0; right:0; bottom:0; height:200px; z-index:0; pointer-events:none;
+  background: linear-gradient(180deg, rgba(11,18,32,0) 0%, var(--pub-bg) 92%); }
+.hero-inner { z-index:1; }
+/* Spotlight that follows the pointer over the hero (see hooks/useGlow.js) */
+.hero-full::before { content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background: radial-gradient(420px circle at var(--gx, 65%) var(--gy, 40%), rgba(34,211,238,.17), transparent 70%); }
+/* Custom grid: lines drift slowly, fade out toward the edges */
+.hero-grid { position:absolute; inset:0; z-index:-2; pointer-events:none;
+  background-image: linear-gradient(rgba(34,211,238,.075) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,.075) 1px, transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 25%, transparent 100%);
+          mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 25%, transparent 100%);
+  animation: gridDrift 20s linear infinite; }
+@keyframes gridDrift { to { background-position: 48px 48px; } }
+.hero-canvas { position:absolute; inset:0; z-index:-1; width:100%; height:100%; display:block; pointer-events:none; opacity:.85;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%); mask-image: linear-gradient(180deg, #000 55%, transparent 100%); }
+
+.hero-inner { position:relative; width:min(1180px, calc(100% - 36px)); margin:0 auto; display:grid; gap:30px; align-items:center; }
+@media (min-width: 960px) { .hero-inner { grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap:48px; } }
+.hero-copy .kicker { display:inline-flex; align-items:center; gap:8px; margin:0; padding:6px 12px; border-radius:999px;
+  border:1px solid rgba(34,211,238,.3); background:rgba(34,211,238,.08); }
+.hero-copy .kicker::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--pub-accent); animation: livePing 2s ease-out infinite; }
+@keyframes livePing { 0% { box-shadow:0 0 0 0 rgba(34,211,238,.6); } 100% { box-shadow:0 0 0 10px rgba(34,211,238,0); } }
+.hero-copy h1 { font-size: clamp(2rem, 4.9vw, 3.5rem); line-height:1.07; letter-spacing:-.02em; margin:16px 0 16px; }
+.hero-copy .w { display:inline-block; will-change:transform; }
+.hero-copy .lead { font-size:1.08rem; max-width:560px; }
+.hero-copy .cta-row { gap:12px; }
+.hero-copy .cta-row .btn { flex:1 1 210px; margin-top:8px; }
+.hero-copy .btn.danger { box-shadow:0 10px 26px rgba(244,63,94,.32); }
+.hero-visual { perspective:1200px; }
+.hero-visual .sim { margin:0; max-width:none; height:clamp(270px, 36vw, 390px); box-shadow:0 26px 60px rgba(0,0,0,.45); }
+
+/* ---------- Pinned 3D scrollytelling ---------- */
+.story { position:relative; margin-top:28px; }
+.story-stage { position:sticky; top:86px; z-index:0; height:min(70vh, 580px); border-radius:22px; overflow:hidden; border:1px solid var(--pub-line);
+  background: radial-gradient(circle at 50% 30%, #15263f, #0b1220 72%); box-shadow:0 24px 60px rgba(0,0,0,.4); }
+.story-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.story-caption { position:absolute; left:16px; right:16px; bottom:16px; padding:12px 14px; border-radius:14px;
+  background:rgba(11,18,32,.84); border:1px solid rgba(148,163,184,.18); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+.story-caption small { display:block; color:var(--pub-accent); font-weight:800; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; }
+.story-caption strong { display:block; margin-top:2px; font-size:1.02rem; }
+.story-steps { list-style:none; margin:0; padding:0; position:relative; z-index:1; }
+.story-step { min-height:66vh; display:flex; align-items:center; }
+/* Step card: big numeral, title, body, and a meter that fills as you scroll through the step */
+.story-body { position:relative; isolation:isolate; overflow:hidden; width:100%; padding:26px 28px 24px 30px; border-radius:20px;
+  background:linear-gradient(160deg, rgba(23,38,62,.92), rgba(11,18,32,.94)); border:1px solid rgba(42,56,80,.9);
+  box-shadow:0 14px 30px rgba(0,0,0,.25); transition:border-color .4s ease, box-shadow .4s ease, transform .4s ease; }
+/* Accent rail on the left edge */
+.story-body::before { content:''; position:absolute; left:0; top:18px; bottom:18px; width:3px; border-radius:0 3px 3px 0;
+  background:linear-gradient(180deg, #22d3ee, #f43f5e); opacity:.25; transition:opacity .4s ease; }
+.story-step.on .story-body { border-color:rgba(34,211,238,.45); box-shadow:0 22px 46px rgba(0,0,0,.4), 0 0 0 1px rgba(34,211,238,.08); }
+.story-step.on .story-body::before { opacity:1; }
+.story-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.story-num { font-size:3.4rem; font-weight:900; line-height:1; letter-spacing:-.04em; color:transparent;
+  -webkit-text-stroke:1.5px rgba(34,211,238,.55); transition:color .4s ease, -webkit-text-stroke-color .4s ease; }
+.story-step.on .story-num { color:rgba(34,211,238,.14); -webkit-text-stroke-color:#22d3ee; }
+.story-badge { font-size:.72rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--pub-muted);
+  padding:5px 10px; border-radius:999px; border:1px solid rgba(148,163,184,.25); }
+.story-step.on .story-badge { color:#06202a; background:var(--pub-accent); border-color:var(--pub-accent); }
+.story-body h3 { margin:14px 0 8px; font-size:1.3rem; letter-spacing:-.01em; }
+.story-body p { margin:0; color:var(--pub-muted); font-size:1.02rem; line-height:1.55; }
+.story-meter { margin-top:18px; height:3px; border-radius:3px; background:rgba(148,163,184,.15); overflow:hidden; }
+.story-meter span { display:block; width:100%; height:100%; transform-origin:left center; transform:scaleX(0);
+  background:linear-gradient(90deg, #22d3ee, #34d399); }
+@media (min-width: 900px) {
+  .story { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:44px; align-items:start; }
+  .story-stage { grid-column:1; grid-row:1; height:min(74vh, 600px); top:92px; }
+  .story-steps { grid-column:2; grid-row:1; }
+  .story-step { min-height:70vh; }
+}
+@media (max-width: 899px) {
+  .story-stage { height:40vh; min-height:260px; top:72px; }
+  .story-step { min-height:62vh; align-items:flex-end; padding-bottom:10px; }
+  .story-body { background:rgba(19,29,48,.9); }
+}
+
+/* ---------- Pointer glow on cards ---------- */
+.stat, .who-card, .report-side, .zoom-card, .story-body, .stair .bubble { position:relative; overflow:hidden; isolation:isolate; }
+.stat::after, .who-card::after, .report-side::after, .zoom-card::after, .story-body::after, .stair .bubble::after {
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:0; transition:opacity .35s ease;
+  background: radial-gradient(240px circle at var(--gx, 50%) var(--gy, 50%), rgba(34,211,238,.16), transparent 70%); }
+.stat:hover::after, .who-card:hover::after, .report-side:hover::after, .zoom-card:hover::after, .story-body:hover::after, .stair .bubble:hover::after { opacity:1; }
+.stat { transition: border-color .3s ease, transform .3s ease; }
+.stat:hover { border-color: rgba(34,211,238,.4); }
+.who-card { transition: border-color .3s ease, transform .3s ease; }
+.who-card:hover { border-color: rgba(34,211,238,.4); transform: translateY(-3px); }
+
+/* ---------- Reduced motion: keep content, drop motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-grid { animation:none; }
+  .hero-copy .kicker::before { animation:none; }
+  .story-stage { display:none; }
+  .story-step { min-height:0; }
+  .story-body { opacity:1; transition:none; }
+  .stat, .who-card { transition:none; transform:none; }
+  .stat::after, .who-card::after, .report-side::after, .zoom-card::after, .story-body::after, .stair .bubble::after { display:none; }
+}
+
+/* Lenis smooth scroll: it does the smoothing, so the native CSS smooth scroll must stay off */
+html.lenis, html.lenis body { height:auto; }
+.lenis.lenis-smooth { scroll-behavior:auto !important; }
+.lenis.lenis-stopped { overflow:hidden; }

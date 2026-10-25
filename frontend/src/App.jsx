@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { SSEClient } from './lib/sse.js';
-import Map from './components/Map.jsx';
+import LiveMap from './components/LiveMap.jsx';
 import Controls from './components/Controls.jsx';
 import ReasonCard from './components/ReasonCard.jsx';
 
-export default function App() {
+export default function App({ reports = [], selectedReportId = null, onSelectReport = null }) {
   const [units, setUnits] = useState([]);
   const [summary, setSummary] = useState({
     total: 0,
@@ -290,8 +290,11 @@ export default function App() {
 
           {/* Interactive Map */}
           <div className="map-card-wrapper">
-            <Map
+            <LiveMap
               units={units}
+              reports={reports}
+              selectedReportId={selectedReportId}
+              onSelectReport={onSelectReport}
               selectedUnitId={selectedUnitId}
               onSelectUnit={(unit) => setSelectedUnitId(unit.id === selectedUnitId ? null : unit.id)}
               activeRequest={activeRequest}

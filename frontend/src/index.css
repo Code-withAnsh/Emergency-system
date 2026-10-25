@@ -1022,3 +1022,9 @@ code, pre, .font-mono {
 }
 
 
+
+/* Keyboard focus: visible ring on every interactive element (accessibility) */
+:focus-visible {
+  outline: 3px solid #22d3ee;
+  outline-offset: 2px;
+}

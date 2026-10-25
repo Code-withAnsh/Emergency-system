@@ -87,7 +87,8 @@ export class FleetSimulator {
     // 1. Update simulated units
     for (const unit of this.units.values()) {
       // Handle Busy countdown
-      if (unit.status === 'busy') {
+      // A unit on a dispatch task stays busy until it arrives; the countdown only runs on scene or when no task is set
+      if (unit.status === 'busy' && !unit.onTask) {
         unit.busyRemainingSeconds = Math.max(0, (unit.busyRemainingSeconds || 0) - 1);
         if (unit.busyRemainingSeconds <= 0) {
           unit.status = 'free';
@@ -128,7 +129,11 @@ export class FleetSimulator {
       const distDeg = Math.hypot(dLat, dLng);
 
       // Degree distance threshold (~50m ≈ 0.00045 deg)
-      if (distDeg < 0.00045) {
+      if (distDeg < 0.00045 && unit.onTask) {
+        // Arrived at the patient: stay on scene for the busy duration, then free up
+        unit.onTask = false;
+        unit.busyRemainingSeconds = THRESHOLDS.BUSY_DURATION_SECONDS;
+      } else if (distDeg < 0.00045) {
         // Target reached: assign new wander target inside Bhopal box
         unit.targetLat = Number(randomInRange(MAP_CONFIG.MIN_LAT + 0.008, MAP_CONFIG.MAX_LAT - 0.008).toFixed(6));
         unit.targetLng = Number(randomInRange(MAP_CONFIG.MIN_LNG + 0.008, MAP_CONFIG.MAX_LNG - 0.008).toFixed(6));
@@ -223,6 +228,7 @@ export class FleetSimulator {
     if (!unit) return false;
     unit.status = 'busy';
     unit.busyRemainingSeconds = durationSeconds;
+    unit.onTask = Boolean(target && target.lat && target.lng);
     if (target && target.lat && target.lng) {
       unit.targetLat = target.lat;
       unit.targetLng = target.lng;
@@ -234,6 +240,7 @@ export class FleetSimulator {
     const unit = this.units.get(id) || this.phoneUnits.get(id);
     if (!unit) return false;
     unit.status = 'free';
+    unit.onTask = false;
     unit.busyRemainingSeconds = 0;
     return true;
   }
@@ -244,7 +251,7 @@ export class FleetSimulator {
       ...phone,
       source: 'phone',
       status: phone.status || 'free',
-      gpsUpdatedAt: phone.gpsUpdatedAt || Date.now(),
+      gpsUpdatedAt: phone.gpsUpdatedAt ?? Date.now(),
       busyRemainingSeconds: 0
     });
   }
